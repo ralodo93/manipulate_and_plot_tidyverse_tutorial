@@ -90,7 +90,7 @@ pheno_data %>%
 
 pheno_data %>%
   # You can change some colnames
-  rename("title_new" = "title", "cell_dex_new" = "cell_dex") %>%
+  rename("title_new" = "title", "cell_dex_new" = "cell_type") %>%
   head()
 ```
 
@@ -115,10 +115,10 @@ pheno_data %>%
   filter(individual %in% c("3139","3153")) %>%
   head()
 
-  pheno_data %>%
-    # Keep the rows that are different from 3139 or 3153
-    filter(!individual %in% c("3139","3153")) %>%
-    head()
+pheno_data %>%
+  # Keep the rows that are different from 3139 or 3153
+  filter(!individual %in% c("3139","3153")) %>%
+  head()
 ```
 
 
@@ -248,7 +248,7 @@ With **group_by()** there is other function that works perfect. That function is
 
 ```{r}
 pheno_data %>%
-  summarize(cell_type) %>%
+  group_by(cell_type) %>%
   do(head(.,3))
 ```
 
@@ -290,6 +290,10 @@ results_filt %>%
 results_filt %>%
   full_join(gene_info_filt, by = c("gene" = "ensembl_gene_id")) %>%
   head()
+
+results_filt %>%
+  full_join(gene_info_filt, by = c("gene" = "ensembl_gene_id")) %>%
+  tail()
 ```
 
 Both **left_join()** and **right_join()** function priorizates the left (only rows with log2FoldChange > 1) and right (only rows with chromosome_name == "X") tables respectively.
