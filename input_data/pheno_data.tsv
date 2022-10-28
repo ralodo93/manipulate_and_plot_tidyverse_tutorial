@@ -1,0 +1,167 @@
+title	individual	cell_type	disease_state	gender
+2950_PBMC	2950	PBMC	Healthy control	Male
+2951_PBMC	2951	PBMC	Healthy control	Female
+2965_PBMC	2965	PBMC	Healthy control	Female
+2964_PBMC	2964	PBMC	Healthy control	Female
+3015_PBMC	3015	PBMC	Healthy control	Male
+2972_PBMC	2972	PBMC	Healthy control	Female
+3019_PBMC	3019	PBMC	Healthy control	Female
+3022_PBMC	3022	PBMC	Alzheimer's disease	Male
+3114_PBMC	3114	PBMC	Alzheimer's disease	Female
+3115_PBMC	3115	PBMC	Alzheimer's disease	Male
+3125_PBMC	3125	PBMC	Alzheimer's disease	Male
+3139_PBMC	3139	PBMC	Alzheimer's disease	Male
+3153_PBMC	3153	PBMC	Alzheimer's disease	Male
+3155_PBMC	3155	PBMC	Alzheimer's disease	Female
+3169_PBMC	3169	PBMC	Healthy control	Male
+3170_PBMC	3170	PBMC	Alzheimer's disease	Female
+3175_PBMC	3175	PBMC	Alzheimer's disease	Male
+3182_PBMC	3182	PBMC	Alzheimer's disease	Male
+3189_PBMC	3189	PBMC	Alzheimer's disease	Female
+3279_PBMC	3279	PBMC	Alzheimer's disease	Female
+3292_PBMC	3292	PBMC	Healthy control	Female
+3344_PBMC	3344	PBMC	Healthy control	Female
+3407_PBMC	3407	PBMC	Alzheimer's disease	Male
+3434_PBMC	3434	PBMC	Alzheimer's disease	Female
+3417_PBMC	3417	PBMC	Healthy control	Male
+3454_PBMC	3454	PBMC	Healthy control	Female
+3420_PBMC	3420	PBMC	Healthy control	Female
+3635_PBMC	3635	PBMC	Healthy control	Male
+3677_PBMC	3677	PBMC	Healthy control	Male
+2930_PBMC	2930	PBMC	Healthy control	Male
+2948_PBMC	2948	PBMC	Healthy control	Female
+2978_PBMC	2978	PBMC	Healthy control	Female
+2983_PBMC	2983	PBMC	Alzheimer's disease	Female
+3157_PBMC	3157	PBMC	Alzheimer's disease	Male
+3183_PBMC	3183	PBMC	Alzheimer's disease	Male
+3322_PBMC	3322	PBMC	Alzheimer's disease	Male
+3831_PBMC	3831	PBMC	Healthy control	Male
+3118_PBMC	3118	PBMC	Alzheimer's disease	Female
+3152_PBMC	3152	PBMC	Alzheimer's disease	Male
+3165_PBMC	3165	PBMC	Alzheimer's disease	Female
+3199_PBMC	3199	PBMC	Alzheimer's disease	Female
+3330_PBMC	3330	PBMC	Alzheimer's disease	Male
+3342_PBMC	3342	PBMC	Alzheimer's disease	Male
+3353_PBMC	3353	PBMC	Alzheimer's disease	Male
+3437_PBMC	3437	PBMC	Alzheimer's disease	Female
+3476_PBMC	3476	PBMC	Alzheimer's disease	Female
+3180_PBMC	3180	PBMC	Healthy control	Male
+3181_PBMC	3181	PBMC	Healthy control	Female
+3190_PBMC	3190	PBMC	Healthy control	Female
+3195_PBMC	3195	PBMC	Healthy control	Male
+3204_PBMC	3204	PBMC	Healthy control	Female
+3207_PBMC	3207	PBMC	Healthy control	Male
+3277_PBMC	3277	PBMC	Healthy control	Female
+3278_PBMC	3278	PBMC	Healthy control	Male
+3345_PBMC	3345	PBMC	Healthy control	Male
+2950_CD4	2950	CD4 memory T cells	Healthy control	Male
+2951_CD4	2951	CD4 memory T cells	Healthy control	Female
+2965_CD4	2965	CD4 memory T cells	Healthy control	Female
+2964_CD4	2964	CD4 memory T cells	Healthy control	Female
+2999_CD4	2999	CD4 memory T cells	Healthy control	Female
+3015_CD4	3015	CD4 memory T cells	Healthy control	Male
+2972_CD4	2972	CD4 memory T cells	Healthy control	Female
+3022_CD4	3022	CD4 memory T cells	Alzheimer's disease	Male
+3114_CD4	3114	CD4 memory T cells	Alzheimer's disease	Female
+3115_CD4	3115	CD4 memory T cells	Alzheimer's disease	Male
+3125_CD4	3125	CD4 memory T cells	Alzheimer's disease	Male
+3139_CD4	3139	CD4 memory T cells	Alzheimer's disease	Male
+3153_CD4	3153	CD4 memory T cells	Alzheimer's disease	Male
+3155_CD4	3155	CD4 memory T cells	Alzheimer's disease	Female
+3169_CD4	3169	CD4 memory T cells	Healthy control	Male
+3170_CD4	3170	CD4 memory T cells	Alzheimer's disease	Female
+3175_CD4	3175	CD4 memory T cells	Alzheimer's disease	Male
+3182_CD4	3182	CD4 memory T cells	Alzheimer's disease	Male
+3189_CD4	3189	CD4 memory T cells	Alzheimer's disease	Female
+3279_CD4	3279	CD4 memory T cells	Alzheimer's disease	Female
+3292_CD4	3292	CD4 memory T cells	Healthy control	Female
+3344_CD4	3344	CD4 memory T cells	Healthy control	Female
+3407_CD4	3407	CD4 memory T cells	Alzheimer's disease	Male
+3434_CD4	3434	CD4 memory T cells	Alzheimer's disease	Female
+3417_CD4	3417	CD4 memory T cells	Healthy control	Male
+3454_CD4	3454	CD4 memory T cells	Healthy control	Female
+3420_CD4	3420	CD4 memory T cells	Healthy control	Female
+3635_CD4	3635	CD4 memory T cells	Healthy control	Male
+3677_CD4	3677	CD4 memory T cells	Healthy control	Male
+2930_CD4	2930	CD4 memory T cells	Healthy control	Male
+2948_CD4	2948	CD4 memory T cells	Healthy control	Female
+2978_CD4	2978	CD4 memory T cells	Healthy control	Female
+2983_CD4	2983	CD4 memory T cells	Alzheimer's disease	Female
+3157_CD4	3157	CD4 memory T cells	Alzheimer's disease	Male
+3183_CD4	3183	CD4 memory T cells	Alzheimer's disease	Male
+3322_CD4	3322	CD4 memory T cells	Alzheimer's disease	Male
+3831_CD4	3831	CD4 memory T cells	Healthy control	Male
+3118_CD4m	3118	CD4 memory T cells	Alzheimer's disease	Female
+3152_CD4m	3152	CD4 memory T cells	Alzheimer's disease	Male
+3165_CD4m	3165	CD4 memory T cells	Alzheimer's disease	Female
+3199_CD4m	3199	CD4 memory T cells	Alzheimer's disease	Female
+3330_CD4m	3330	CD4 memory T cells	Alzheimer's disease	Male
+3342_CD4m	3342	CD4 memory T cells	Alzheimer's disease	Male
+3353_CD4m	3353	CD4 memory T cells	Alzheimer's disease	Male
+3437_CD4m	3437	CD4 memory T cells	Alzheimer's disease	Female
+3476_CD4m	3476	CD4 memory T cells	Alzheimer's disease	Female
+3180_CD4m	3180	CD4 memory T cells	Healthy control	Male
+3181_CD4m	3181	CD4 memory T cells	Healthy control	Female
+3190_CD4m	3190	CD4 memory T cells	Healthy control	Female
+3195_CD4m	3195	CD4 memory T cells	Healthy control	Male
+3204_CD4m	3204	CD4 memory T cells	Healthy control	Female
+3207_CD4m	3207	CD4 memory T cells	Healthy control	Male
+3277_CD4m	3277	CD4 memory T cells	Healthy control	Female
+3278_CD4m	3278	CD4 memory T cells	Healthy control	Male
+3345_CD4m	3345	CD4 memory T cells	Healthy control	Male
+2950_CD8	2950	CD8 memory T cells	Healthy control	Male
+2951_CD8	2951	CD8 memory T cells	Healthy control	Female
+2965_CD8	2965	CD8 memory T cells	Healthy control	Female
+2964_CD8	2964	CD8 memory T cells	Healthy control	Female
+2999_CD8	2999	CD8 memory T cells	Healthy control	Female
+3015_CD8	3015	CD8 memory T cells	Healthy control	Male
+2972_CD8	2972	CD8 memory T cells	Healthy control	Female
+3019_CD8	3019	CD8 memory T cells	Healthy control	Female
+3022_CD8	3022	CD8 memory T cells	Alzheimer's disease	Male
+3115_CD8	3115	CD8 memory T cells	Alzheimer's disease	Male
+3125_CD8	3125	CD8 memory T cells	Alzheimer's disease	Male
+3139_CD8	3139	CD8 memory T cells	Alzheimer's disease	Male
+3153_CD8	3153	CD8 memory T cells	Alzheimer's disease	Male
+3155_CD8	3155	CD8 memory T cells	Alzheimer's disease	Female
+3169_CD8	3169	CD8 memory T cells	Healthy control	Male
+3170_CD8	3170	CD8 memory T cells	Alzheimer's disease	Female
+3175_CD8	3175	CD8 memory T cells	Alzheimer's disease	Male
+3182_CD8	3182	CD8 memory T cells	Alzheimer's disease	Male
+3189_CD8	3189	CD8 memory T cells	Alzheimer's disease	Female
+3279_CD8	3279	CD8 memory T cells	Alzheimer's disease	Female
+3292_CD8	3292	CD8 memory T cells	Healthy control	Female
+3344_CD8	3344	CD8 memory T cells	Healthy control	Female
+3407_CD8	3407	CD8 memory T cells	Alzheimer's disease	Male
+3434_CD8	3434	CD8 memory T cells	Alzheimer's disease	Female
+3417_CD8	3417	CD8 memory T cells	Healthy control	Male
+3454_CD8	3454	CD8 memory T cells	Healthy control	Female
+3420_CD8	3420	CD8 memory T cells	Healthy control	Female
+3635_CD8	3635	CD8 memory T cells	Healthy control	Male
+3677_CD8	3677	CD8 memory T cells	Healthy control	Male
+2930_CD8	2930	CD8 memory T cells	Healthy control	Male
+2948_CD8	2948	CD8 memory T cells	Healthy control	Female
+2978_CD8	2978	CD8 memory T cells	Healthy control	Female
+2983_CD8	2983	CD8 memory T cells	Alzheimer's disease	Female
+3157_CD8	3157	CD8 memory T cells	Alzheimer's disease	Male
+3183_CD8	3183	CD8 memory T cells	Alzheimer's disease	Male
+3322_CD8	3322	CD8 memory T cells	Alzheimer's disease	Male
+3831_CD8	3831	CD8 memory T cells	Healthy control	Male
+3118_CD8m	3118	CD8 memory T cells	Alzheimer's disease	Female
+3152_CD8m	3152	CD8 memory T cells	Alzheimer's disease	Male
+3165_CD8m	3165	CD8 memory T cells	Alzheimer's disease	Female
+3199_CD8m	3199	CD8 memory T cells	Alzheimer's disease	Female
+3330_CD8m	3330	CD8 memory T cells	Alzheimer's disease	Male
+3342_CD8m	3342	CD8 memory T cells	Alzheimer's disease	Male
+3353_CD8m	3353	CD8 memory T cells	Alzheimer's disease	Male
+3437_CD8m	3437	CD8 memory T cells	Alzheimer's disease	Female
+3476_CD8m	3476	CD8 memory T cells	Alzheimer's disease	Female
+3180_CD8m	3180	CD8 memory T cells	Healthy control	Male
+3181_CD8m	3181	CD8 memory T cells	Healthy control	Female
+3190_CD8m	3190	CD8 memory T cells	Healthy control	Female
+3195_CD8m	3195	CD8 memory T cells	Healthy control	Male
+3197_CD8m	3197	CD8 memory T cells	Healthy control	Female
+3204_CD8m	3204	CD8 memory T cells	Healthy control	Female
+3207_CD8m	3207	CD8 memory T cells	Healthy control	Male
+3277_CD8m	3277	CD8 memory T cells	Healthy control	Female
+3278_CD8m	3278	CD8 memory T cells	Healthy control	Male
+3345_CD8m	3345	CD8 memory T cells	Healthy control	Male
