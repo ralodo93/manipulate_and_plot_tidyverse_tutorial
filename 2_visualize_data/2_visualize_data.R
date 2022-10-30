@@ -21,90 +21,109 @@ results <- read.delim("../input_data/results_table.tsv")
 gene_info <- read.delim("../input_data/gene_info.tsv")
 pheno_data <- read.delim("../input_data/pheno_data.tsv")
 
-### First plot ###
+### data ###
 
-# Filter result table
-results_filt <- results %>%
-  filter(pvalue < 0.01) %>%
-  arrange(desc(abs(log2FoldChange))) %>%
-  mutate(greater_or_lower = ifelse(log2FoldChange > 0, "Greater", "Lower")) %>%
-  head(10)
+ggplot(data = pheno_data)
 
-# input the dataset in the function ggplot and add a new layer with +
-ggplot(results_filt)+
-  # Add a geom object (points in that case)
-  geom_point(
-    # use aes() to declare aesthetic
-    aes(
-      # declare x and yaxis
-      x = gene,
-      y = log2FoldChange
-    )
-  )
+ggplot(data = results, mapping = aes(y = log2FoldChange, x = baseMean))
 
-# The code without comments:
-ggplot(results_filt)+
-  geom_point(aes(x = gene, y = log2FoldChange))
+ggplot(results, aes(y = log2FoldChange, x = baseMean)) +
+  geom_point()
+
+ggplot(results) +
+  geom_point(aes(y = log2FoldChange, x = baseMean))
+
+ggplot() +
+  geom_point(data = results, aes(y = log2FoldChange, x = baseMean))
 
 ggsave("images/001_starting.png", height = 5, width = 5)
 
-ggplot(results_filt)+
-  geom_point(aes(x = gene, y = log2FoldChange))+
-  geom_col(aes(x = gene, y = log2FoldChange))
+# Filter gene_info and join results
+results_filt <- gene_info %>%
+  filter(chromosome_name %in% c("1","2","3")) %>%
+  inner_join(results, by = c("ensembl_gene_id" = "gene")) %>%
+  mutate(significant = ifelse(pvalue < 0.05 & abs(log2FoldChange) > 0.5,"Significant","No Significant"))
+
+ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
+  geom_point(color = "blue", size = 3)+
+  geom_line(color = "darkgreen")
 
 ggsave("images/002_adding_layers.png", height = 5, width = 5)
 
-ggplot(results_filt)+
-  geom_point(aes(x = gene, y = log2FoldChange))+
-  geom_col(aes(x = gene, y = log2FoldChange))+
-  geom_text(aes(x = gene, y = log2FoldChange, label = gene))
 
-ggsave("images/003_three_layers.png", height = 5, width = 5)
+ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue), color = chromosome_name)) +
+  geom_point(size = 3)+
+  geom_line()
 
-# Declare aes in ggplot()
-ggplot(results_filt, aes(x = gene, y = log2FoldChange, label = gene))+
-  geom_point()+
-  geom_col()+
-  geom_text()
+ggsave("images/003_adding_color.png", height = 5, width = 5)
 
-#### Start customizing
+ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
+  geom_point(aes(size = lfcSE, color = chromosome_name))+
+  geom_line()
 
-# add characteristic
-ggplot(results_filt, aes(x = gene, y = log2FoldChange, label = gene))+
-  geom_point(size = 3, shape = 7)+
-  geom_col(fill = "pink", alpha = 0.8)+
-  geom_text(size = 2, nudge_y = -1.5,angle = 90)
+ggsave("images/004_color_points.png", height = 5, width = 5)
+
+ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
+  geom_point(aes(size = lfcSE, color = chromosome_name))+
+  geom_line()+
+  geom_text(aes(label = ensembl_gene_id), size = 2)
+
+ggsave("images/005_error_text.png", height = 5, width = 5)
+
+results_filt_text <- results_filt %>%
+  filter(significant == "Significant")
+
+ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
+  geom_point(aes(size = lfcSE, color = chromosome_name))+
+  geom_line()+
+  geom_text(data = results_filt_text,aes(label = ensembl_gene_id), size = 2)
+
+ggsave("images/006_good_text.png", height = 5, width = 5)
 
 
-# Change the order of layers
-ggplot(results_filt, aes(x = gene, y = log2FoldChange, label = gene))+
-  geom_col(fill = "pink", alpha = 0.8)+
-  geom_point(size = 3, shape = 7)+
-  geom_text(size = 2, nudge_y = -1.5,angle = 90)
+ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
+  geom_text(data = results_filt_text,aes(label = ensembl_gene_id), size = 2)+
+  geom_point(aes(size = lfcSE, color = chromosome_name))+
+  geom_line()
 
-# Improve text
+ggsave("images/007_reorder_layers.png", height = 5, width = 5)
 
-ggplot(results_filt, aes(x = gene, y = log2FoldChange, label = gene))+
-  geom_col(fill = "pink", alpha = 0.8)+
-  geom_point(size = 3, shape = 7)+
-  geom_text(data = results_filt %>% filter(log2FoldChange > 0),
-            size = 2, nudge_y = -1.5,angle = 90)
 
-ggplot(results_filt, aes(x = gene, y = log2FoldChange, label = gene))+
-  geom_col(fill = "pink", alpha = 0.8)+
-  geom_point(size = 3, shape = 7)+
-  geom_text(data = results_filt %>% filter(log2FoldChange > 0),
-            size = 2, nudge_y = -1.5,angle = 90)+
-  geom_text(data = results_filt %>% filter(log2FoldChange < 0),
-            size = 2, nudge_y = 1.5,angle = 90)
+ggplot(pheno_data, aes(x = cell_type))+
+  geom_bar()
 
-### adding more aes
+ggsave("images/008_stat_bar.png", height = 5, width = 5)
 
-ggplot(results_filt, aes(x = gene, y = log2FoldChange, label = gene,
-                         fill = greater_or_lower, size = abs(log2FoldChange)))+
-  geom_col(alpha = 0.8)+
-  geom_point(shape = 7)+
-  geom_text(data = results_filt %>% filter(log2FoldChange > 0),
-            size = 2, nudge_y = -1.5,angle = 90)+
-  geom_text(data = results_filt %>% filter(log2FoldChange < 0),
-            size = 2, nudge_y = 1.5,angle = 90)
+
+pheno_data_count <- pheno_data %>%
+  group_by(cell_type) %>%
+  count()
+
+ggplot(pheno_data_count, aes(x = cell_type, y = n))+
+  geom_bar(stat = "identity")
+
+ggplot(pheno_data_count, aes(x = cell_type, y = n))+
+  geom_col()
+
+###
+
+ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
+  geom_bar()
+
+ggsave("images/009_color_and_fill.png", width = 5, height = 5)
+
+ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
+  geom_bar()+
+  scale_fill_brewer(type = "qual", palette = "Dark2")+
+  scale_color_brewer(type = "qual", palette = "Set3")
+
+ggsave("images/010_brewer_change_qual.png", width = 5, height = 5)
+
+ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
+  geom_bar()+
+  scale_fill_manual(values = c("Alzheimer's disease" = "gray70",
+                               "Healthy control" = "gray30"))+
+  scale_color_manual(values = c("Female" = "orange",
+                                "Male" = "darkblue"))
+
+ggsave("images/011_manual_change_qual.png", width = 5, height = 5)
