@@ -227,3 +227,29 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
 ```
 
 <p style="text-align:center;"><img src="images/011_manual_change_qual.png" width = "400" height = "400"></p>
+
+However, sometimes you will need to scale colors in sequential (from 0 to X) or diverging (from -X to X). In both cases the variable to scale should be numeric. There are some function to scale the color of numeric variables but we will use: **scale_"fill or color"_distriller()**, changing the type from "qual" to "div" (diverging) or "seq" (sequential) and **scale_"fill or color"_gradient()** for sequential and **scale_"fill or color"_gradient2()** for diverging.
+
+```{r}
+results_filt_genes <- results_filt %>%
+  filter(pvalue < 0.05, abs(log2FoldChange) > 0.5) %>%
+  arrange(desc(abs(log2FoldChange))) %>%
+  head(10)
+
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_distiller(type = "div", palette = "PiYG")+
+  scale_fill_distiller(type = "seq", palette = "YlOrBr", direction = 1)
+```
+<p style="text-align:center;"><img src="images/012_distiller_numeric.png" width = "400" height = "400"></p>
+
+```{r}
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")
+```
+
+<p style="text-align:center;"><img src="images/013_gradient_numeric.png" width = "400" height = "400"></p>
