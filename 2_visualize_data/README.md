@@ -76,7 +76,7 @@ ggplot() +
 
 The three ways makes exactly the same plot.
 
-![](images/001_starting.png)
+<p style="text-align:center;"><img src="images/001_starting.png" width = "400" height = "400"></p>
 
 Now we are going to explain the differences of the three ways. Imagine that we want to plot only results from chromosomes 1, 2 and 3 and create a new variable that label gene as significant or not (pvalue < 0.05 and abs(log2FoldChange) > 0.5). First, using `dplyr` filter the gene_info and join to results. Try for yourself to practice more with `dplyr`.
 
@@ -84,7 +84,7 @@ Now we are going to explain the differences of the three ways. Imagine that we w
 results_filt <- gene_info %>%
   filter(chromosome_name %in% c("1","2","3")) %>%
   inner_join(results, by = c("ensembl_gene_id" = "gene")) %>%
-  mutate(significant = ifelse(pvalue < 0.05 & abs(log2FoldChange) > 0.5,"Significant","No Significant"))
+  mutate(significant = ifelse(padj < 0.05 & abs(log2FoldChange) > 0.5,"Significant","No Significant"))
 ```
 
 Geometries have several properties that can be changed. For this example, we will change color and size of the points. In addition we can add as many layers as we want. For example we can add a **geom_line()** to plot a line that connect points. You can do it with conventional way.
@@ -95,7 +95,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_line(color = "darkgreen")
 ```
 
-![](images/002_adding_layers.png)
+<p style="text-align:center;"><img src="images/002_adding_layers.png" width = "400" height = "400"></p>
 
 Mapping can serve to differ condition. In the results_filt table we have three columns that define categorical variables (gene (not useful, a lot of them), chromosome_name and significant). The other variables are numeric. For example, we want to differ chromosome_name by a color.
 
@@ -105,7 +105,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue), color = chromosom
   geom_line()
 ```
 
-![](images/003_adding_color.png)
+<p style="text-align:center;"><img src="images/003_adding_color.png" width = "400" height = "400"></p>
 
 As you can see both lines and points get the aesthetic color property. But what if we only want to color points in base of chromosome_name?. We need to declare aesthetic inside **geom_point()**. And with this method, we are using the second way to introduce data and mapping in `ggplot2`. In this occasion we will add a new aesthetic property, the size. Instead of plot all points with the same size, we can change sizes according to a numeric variable such as lfcSE, for example. As we will use the same `x` and `y` we only need to declare them in **ggplot()**, but size and mainly color should be declare in **geom_point()**
 
@@ -115,7 +115,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_line()
 ```
 
-![](images/004_color_points.png)
+<p style="text-align:center;"><img src="images/004_color_points.png" width = "400" height = "400"></p>
 
 The last way of introducing data (through geom functions) can be explained with an example of **geom_text()** function, that is used to write labels in the plot. In this example we wan to add labels from only significant genes. We can not include all the data in geom_text() because it will write all gene names.
 
@@ -125,7 +125,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_line()+
   geom_text(aes(label = ensembl_gene_id), size = 2)
 ```
-![](images/005_error_text.png)
+<p style="text-align:center;"><img src="images/005_error_text.png" width = "400" height = "400"></p>
 
 That not what we want. We need to use different data for **geom_text()**. As other **mapping** are the same, it is not necessary to add in **geom_text()** but in occasion we would need to change them.
 
@@ -139,7 +139,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_text(data = results_filt_text,aes(label = ensembl_gene_id), size = 2)
 ```
 
-![](images/006_good_text.png)
+<p style="text-align:center;"><img src="images/006_good_text.png" width = "400" height = "400"></p>
 
 That is what we wanted to plot. Until now, we have learnt how introduce data in `ggplot2`, how mapping some properties, how use some geometries and change the properties of them by setting (like color = "blue") or by aesthetic (like color = chromosome_name).
 
@@ -151,7 +151,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_point(aes(size = lfcSE, color = chromosome_name))+
   geom_line()
 ```
-![](images/007_reorder_layers.png)
+<p style="text-align:center;"><img src="images/007_reorder_layers.png" width = "400" height = "400"></p>
 
 Now the points are over lines and text.
 
@@ -163,7 +163,7 @@ You may have notice that we talked about four different layers that were indispe
 ggplot(pheno_data, aes(x = cell_type))+
   geom_bar()
 ```
-![](images/008_stat_bar.png)
+<p style="text-align:center;"><img src="images/008_stat_bar.png" width = "400" height = "400"></p>
 
 We use **geom_bar()** to count the number of times that happen the aesthetic that we select. In this case, **geom_bar** calculate the number of rows that have the different levels of cell_type variable.
 
@@ -201,7 +201,7 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
   geom_bar()
 ```
 
-![](images/009_color_and_fill.png)
+<p style="text-align:center;"><img src="images/009_color_and_fill.png" width = "400" height = "400"></p>
 
 As you can see fill and color give a different palette color to the variables that we have selected. But the color defined by default by `ggplot2` are usually not informative. In this case is very difficult differentiate color and fill because the colors are the same.
 
@@ -213,7 +213,7 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
   scale_fill_brewer(type = "qual", palette = "Dark2")+
   scale_color_brewer(type = "qual", palette = "Set3")
 ```
-![](images/010_brewer_change_qual.png)
+<p style="text-align:center;"><img src="images/010_brewer_change_qual.png" width = "400" height = "400"></p>
 
 But in several times you would prefer to choose your custom palette. In the case of categorical data, you can use **scale_color_manual()** and **scale_fill_manual()** where you can select the color of each category.
 
@@ -226,4 +226,4 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
                                 "Male" = "darkblue"))
 ```
 
-![](images/011_manual_change_qual.png)
+<p style="text-align:center;"><img src="images/011_manual_change_qual.png" width = "400" height = "400"></p>

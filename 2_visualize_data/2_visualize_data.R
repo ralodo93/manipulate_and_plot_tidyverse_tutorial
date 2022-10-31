@@ -42,7 +42,7 @@ ggsave("images/001_starting.png", height = 4, width = 4)
 results_filt <- gene_info %>%
   filter(chromosome_name %in% c("1","2","3")) %>%
   inner_join(results, by = c("ensembl_gene_id" = "gene")) %>%
-  mutate(significant = ifelse(pvalue < 0.05 & abs(log2FoldChange) > 0.5,"Significant","No Significant"))
+  mutate(significant = ifelse(padj < 0.05 & abs(log2FoldChange) > 0.5,"Significant","No Significant"))
 
 ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_point(color = "blue", size = 3)+
