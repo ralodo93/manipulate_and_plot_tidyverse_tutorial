@@ -36,7 +36,7 @@ ggplot(results) +
 ggplot() +
   geom_point(data = results, aes(y = log2FoldChange, x = baseMean))
 
-ggsave("images/001_starting.png", height = 5, width = 5)
+ggsave("images/001_starting.png", height = 4, width = 4)
 
 # Filter gene_info and join results
 results_filt <- gene_info %>%
@@ -48,27 +48,27 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_point(color = "blue", size = 3)+
   geom_line(color = "darkgreen")
 
-ggsave("images/002_adding_layers.png", height = 5, width = 5)
+ggsave("images/002_adding_layers.png", height = 4, width = 4)
 
 
 ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue), color = chromosome_name)) +
   geom_point(size = 3)+
   geom_line()
 
-ggsave("images/003_adding_color.png", height = 5, width = 5)
+ggsave("images/003_adding_color.png", height = 4, width = 4)
 
 ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_point(aes(size = lfcSE, color = chromosome_name))+
   geom_line()
 
-ggsave("images/004_color_points.png", height = 5, width = 5)
+ggsave("images/004_color_points.png", height = 4, width = 4)
 
 ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_point(aes(size = lfcSE, color = chromosome_name))+
   geom_line()+
   geom_text(aes(label = ensembl_gene_id), size = 2)
 
-ggsave("images/005_error_text.png", height = 5, width = 5)
+ggsave("images/005_error_text.png", height = 4, width = 4)
 
 results_filt_text <- results_filt %>%
   filter(significant == "Significant")
@@ -78,7 +78,7 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_line()+
   geom_text(data = results_filt_text,aes(label = ensembl_gene_id), size = 2)
 
-ggsave("images/006_good_text.png", height = 5, width = 5)
+ggsave("images/006_good_text.png", height = 4, width = 4)
 
 
 ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
@@ -86,13 +86,13 @@ ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
   geom_point(aes(size = lfcSE, color = chromosome_name))+
   geom_line()
 
-ggsave("images/007_reorder_layers.png", height = 5, width = 5)
+ggsave("images/007_reorder_layers.png", height = 4, width = 4)
 
 
 ggplot(pheno_data, aes(x = cell_type))+
   geom_bar()
 
-ggsave("images/008_stat_bar.png", height = 5, width = 5)
+ggsave("images/008_stat_bar.png", height = 4, width = 4)
 
 
 pheno_data_count <- pheno_data %>%
@@ -110,14 +110,14 @@ ggplot(pheno_data_count, aes(x = cell_type, y = n))+
 ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
   geom_bar()
 
-ggsave("images/009_color_and_fill.png", width = 5, height = 5)
+ggsave("images/009_color_and_fill.png", width = 4, height = 4)
 
 ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
   geom_bar()+
   scale_fill_brewer(type = "qual", palette = "Dark2")+
   scale_color_brewer(type = "qual", palette = "Set3")
 
-ggsave("images/010_brewer_change_qual.png", width = 5, height = 5)
+ggsave("images/010_brewer_change_qual.png", width = 4, height = 4)
 
 ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
   geom_bar()+
@@ -126,4 +126,4 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
   scale_color_manual(values = c("Female" = "orange",
                                 "Male" = "darkblue"))
 
-ggsave("images/011_manual_change_qual.png", width = 5, height = 5)
+ggsave("images/011_manual_change_qual.png", width = 4, height = 4)
