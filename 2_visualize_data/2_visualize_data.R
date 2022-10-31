@@ -150,47 +150,113 @@ ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
 ggsave("images/013_gradient_numeric.png", width = 4, height = 4)
 
 
-ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
-  geom_col(aes(fill = -log(pvalue)))+
-  geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
-  scale_fill_gradient(low = "gray80", high = "steelblue")+
-  scale_x_continuous(trans = "log10")
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")
 
-ggsave("images/014_log_trans.png", width = 4, height = 4)
-
-ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
-  geom_col(aes(fill = -log(pvalue)))+
-  geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
-  scale_fill_gradient(low = "gray80", high = "steelblue")+
-  scale_x_continuous(breaks = c(3,10,30))
-
-ggsave("images/015_breaks.png", width = 4, height = 4)
-
-ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
-  geom_col(aes(fill = -log(pvalue)))+
-  geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
-  scale_fill_gradient(low = "gray80", high = "steelblue")+
-  scale_x_continuous(expand = c(0,0))
-
-ggsave("images/016_expand.png", width = 4, height = 4)
-
-ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
-  geom_col(aes(fill = -log(pvalue)))+
-  geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
-  scale_fill_gradient(low = "gray80", high = "steelblue")+
-  scale_x_continuous(limits = c(0,30))
-
-ggsave("images/017_limits.png", width = 4, height = 4)
+ggsave("images/014_scales_pre.png", width = 4, height = 4)
 
 
-ggplot(results_filt_genes[c(1,2),], aes(y = ensembl_gene_id, x = -log(pvalue)))+
-  geom_col(aes(fill = -log(pvalue)))+
-  geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
-  scale_fill_gradient(low = "gray80", high = "steelblue")+
-  scale_y_discrete(labels = c("ENSG00000225972" = "Gene1",
-                              "ENSG00000116031" = "Gene2"))
+## limits
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(limits = c(0,5))
+
+ggsave("images/015_scales_limits.png", width = 4, height = 4)
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  ylim(c(0,5))
+
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(limits = c(0, 10), 
+                     expand = expansion(mult = c(0, 0.5), 
+                                           add = c(0, -3)))
+
+# bottom position will be 0 - (10-0) * 0.0  -0 = 0,
+# top position will be 10 + (10-0) * 0.5 +(-3) = 12
+
+ggsave("images/016_scales_expand.png", width = 4, height = 4)
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_x_continuous(breaks = c(-1,0,1))
+
+ggsave("images/017_scales_breaks.png", width = 4, height = 4)
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_x_continuous(breaks = scales::breaks_width(0.5))
+
+ggsave("images/018_scales_breaks_range.png", width = 4, height = 4)
+
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(trans = "log10")
+
+ggsave("images/019_scales_trans.png", width = 4, height = 4)
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(trans = "sqrt")
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(trans = "reverse")
+
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange, size = -log(pvalue)))+
+  scale_color_distiller(type = "div")
+
+ggsave("images/020_scales_size_pre.png", width = 4, height = 4)
+
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange, size = -log(pvalue)))+
+  scale_color_distiller(type = "div")+
+  scale_size_continuous(range = c(3,10))
+
+ggsave("images/021_scales_size.png", width = 4, height = 4)
+
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange, size = -log(pvalue), alpha = -log(pvalue)))+
+  scale_color_distiller(type = "div")+
+  scale_alpha_continuous(range = c(1,0.1))
+
+ggsave("images/022_scales_alpha.png", width = 4, height = 4)
+
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange))+
+  scale_color_distiller(type = "div")+
+  facet_wrap(~chromosome_name)
+
+ggsave("images/023_facet_1.png", width = 4, height = 4)
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange))+
+  scale_color_distiller(type = "div")+
+  facet_wrap(~chromosome_name, scales = "free_y")
+
+ggsave("images/024_facet_2.png", width = 4, height = 4)
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange))+
+  scale_color_distiller(type = "div")+
+  facet_grid(significant~chromosome_name)
+
+ggsave("images/025_facet_3.png", width = 4, height = 4)

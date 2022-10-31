@@ -190,7 +190,7 @@ Until now, we have seen only the very basic of `ggplot2`, how it works and how w
 
 Everything inside the **mapping** are scaled. As we have seen, `x` and `y` axis are scaled from minimum to maximum values (numeric or categorical), colors are scaled with a palette of colors (red, blue, green), and size are scaled from minimum to maximum value too. This scales are by default defined by `ggplot2` but we can change them with some scales functions.
 
-These scales functions are named as: **scale_<aes property>_<type>()**, where aes property is color, or x, or y and type is the type of transformation like continuous, manual or gradient.
+These scales functions are named as: **scale_"aes property"_"type"()**, where aes property is color, or x, or y and type is the type of transformation like continuous, manual or gradient.
 
 #### Scaling color and fill
 
@@ -204,6 +204,8 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
 <p style="text-align:center;"><img src="images/009_color_and_fill.png" width = "400" height = "400"></p>
 
 As you can see fill and color give a different palette color to the variables that we have selected. But the color defined by default by `ggplot2` are usually not informative. In this case is very difficult differentiate color and fill because the colors are the same.
+
+##### Categorical data
 
 We can use scales to change color or fill or both of them. There are a lot of scale_color_ and scale_fill_ functions and they can be used for different types of data. In this case, color and fill reflect categorical data, so we will need a scale function that regulates categorical data. For example **scale_color_brewer()** and **scale_fill_brewer()** includes some color schemes for sequential, diverging and qualitative scales from `ColorBrewer`. You only need to recognise the type of data that you have and select the palette that you want (see the help).
 
@@ -227,6 +229,8 @@ ggplot(pheno_data, aes(x = cell_type, color = gender, fill = disease_state))+
 ```
 
 <p style="text-align:center;"><img src="images/011_manual_change_qual.png" width = "400" height = "400"></p>
+
+##### Numeric variable
 
 However, sometimes you will need to scale colors in sequential (from 0 to X) or diverging (from -X to X). In both cases the variable to scale should be numeric. There are some function to scale the color of numeric variables but we will use: **scale_"fill or color"_distriller()**, changing the type from "qual" to "div" (diverging) or "seq" (sequential) and **scale_"fill or color"_gradient()** for sequential and **scale_"fill or color"_gradient2()** for diverging. To show how use them we will use the next data:
 
@@ -255,21 +259,177 @@ ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
 <p style="text-align:center;"><img src="images/013_gradient_numeric.png" width = "400" height = "400"></p>
 
 
-### Scale x and y axis
+#### Scale x and y axis
 
-In some occasions, we will need to scale the scale of one or both axis in order to deal with outliers or simply because we want to remark some specific values. Once again, we have to differenciate between axis with numeric and categorical values. We will start with numeric values, since are the most common that need x or y axis scaling.
+In some occasions, we will need to scale the scale of one or both axis in order to deal with outliers or simply because we want to remark some specific values.
 
-In the previous example, we can observe a gene that have a much higher value of -log(pvalue).
-
-<p style="text-align:center;"><img src="images/013_gradient_numeric.png" width = "400" height = "400"></p>
-
-We want know scale the x axis in order to distribute more efficient the data and avoid the noise of the outlier. To do that we will use the function **scale_"x or y"_continuous** and we will transform the axis to log10:
+There are some ways to change the scale of the axis. We will use as example the next data and figure.
 
 ```{r}
-ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
-  geom_col(aes(fill = -log(pvalue)))+
-  geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
-  scale_fill_gradient(low = "gray80", high = "steelblue")+
-  scale_x_continuous(trans = "log10")
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")
 ```
+
+<p style="text-align:center;"><img src="images/014_scales_pre.png" width = "400" height = "400"></p>
+
+##### Limits
+
+The most common approach to scale the axis is reducing or increasing the limits. We can do it with the functions **scale_"x or y"_continuous()**. This function has a parameter *limits* that is a vector in which we define the min an the max value that we want to to plot. It is useful to zoom in some area.
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(limits = c(0,5))
+```
+
+You will receive a warning that informs about the lost of 30 points (those with a -log(pvalue) > 5)
+
+<p style="text-align:center;"><img src="images/015_scales_limits.png" width = "400" height = "400"></p>
+
+You can do the same with functions **xlim()** and **ylim()**.
+
+##### Expansions
+
+As you can see, `ggplot2` does not use the min and max value to start the plot. It chooses little margin both vertical and horizontal axis. To remove or increase these margins you have to modify the expansion. This can be done with the functions **scale_"x or y"_continuous()**, that have a parameter *expand*, similar to limits. In order to explain how works *expand* we will play with *limits* and *expand*
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(limits = c(0, 10),
+                     expand = expansion(mult = c(0, 0.5),
+                                           add = c(0, -3)))
+
+# bottom position will be 0 - (10-0) * 0.0  -0 = 0,
+# top position will be 10 + (10-0) * 0.5 +(-3) = 12
+```
+
+<p style="text-align:center;"><img src="images/016_scales_expand.png" width = "400" height = "400"></p>
+
+
+##### Breaks
+
+You can also select the location of marks from an axis using the parameters *breaks* of function **scale_"x or y"_continuous()**.
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_x_continuous(breaks = c(-1,0,1)) # Only show -1,0,1
+```
+
+<p style="text-align:center;"><img src="images/017_scales_breaks.png" width = "400" height = "400"></p>
+
+Or setting the breaks with a range
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_x_continuous(breaks = scales::breaks_width(0.5)) # Each 0.5
+```
+<p style="text-align:center;"><img src="images/018_scales_breaks_range.png" width = "400" height = "400"></p>
+
+##### Transformation
+
+Finally we can transform the axis into a different scale. You can reverse the scale, transform to logarithmic or squared scale. By default, the parameter *trans* is set to "identity" and we can choose several different transformation like "log10", "sqrt" or "reverse"
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(trans = "log10")
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(trans = "sqrt")
+
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange), size = 1.5)+
+  scale_color_distiller(type = "div")+
+  scale_y_continuous(trans = "reverse")
+```
+<p style="text-align:center;"><img src="images/019_scales_trans.png" width = "400" height = "400"></p>
+
+#### Scale size, alpha, shape, linetype
+
+You can scale with **scale_"aes object"_"type"()** functions a lot of properties of the graphics. In this example we will display the scaling of size and alpha, but the other aes properties follows similar behaviour. Do not forget to check the help from the functions.
+
+##### Size
+
+Instead of selecting the same size for all the points, we are going to introduce size as an aesthetic that depends on the value of -log(pvalue).
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange, size = -log(pvalue)))+
+  scale_color_distiller(type = "div")
+```
+
+<p style="text-align:center;"><img src="images/020_scales_size_pre.png" width = "400" height = "400"></p>
+
+The size of the points is already scaled by default, from 1 to 6. But maybe you want to change the scale. Only use the **scale_size_continuous()** function to change the scale. Imagine you want to make the points greater, change the range.
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange, size = -log(pvalue)))+
+  scale_color_distiller(type = "div")+
+  scale_size_continuous(range = c(3,10))
+```
+<p style="text-align:center;"><img src="images/021_scales_size.png" width = "400" height = "400"></p>
+
+##### Alpha
+
+Alpha works similar than size, with the function **scale_alpha_continuous()**. By default the range is from 0.1 to 1. But we can change. To visualize better the change, we reverse the range from 1 to 0.1.
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange, size = -log(pvalue), alpha = -log(pvalue)))+
+  scale_color_distiller(type = "div")+
+  scale_alpha_continuous(range = c(1,0.1))
+```
+<p style="text-align:center;"><img src="images/022_scales_alpha.png" width = "400" height = "400"></p>
+
+
+Of course we can explain much more about scales, but it will be a proper course.
+
+### Facets
+
+Facets are used to split the graphic in multiple plot in order to improve or detail the visualization and is a good way to avoid over plotting. For example, and following with our point plot, we can split the graphic according to chromosome_name. To facet a plot there are two functions. **facet_wrap()** and **facet_grid()**.
+
+#### facet_wrap
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange))+
+  scale_color_distiller(type = "div")+
+  facet_wrap(~chromosome_name)
+```
+<p style="text-align:center;"><img src="images/023_facet_1.png" width = "400" height = "400"></p>
+
+By this way you can check in which chromosome are located the more interested genes (the outlier in this case). By default, **facet_wrap()** maintain the same scale in all the splitted plot, but we can change it.
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange))+
+  scale_color_distiller(type = "div")+
+  facet_wrap(~chromosome_name, scales = "free_y")
+```
+
+Setting scales to fre_y, cobvert each splitted plot with one determinated scale in the axis `y`.
+
+<p style="text-align:center;"><img src="images/024_facet_2.png" width = "400" height = "400"></p>
+
+#### facet_grid
+
+**facet_grid()** allows to do graphic pivots.
+
+```{r}
+ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
+  geom_point(aes(color = log2FoldChange))+
+  scale_color_distiller(type = "div")+
+  facet_grid(significant~chromosome_name)
+```
+<p style="text-align:center;"><img src="images/025_facet_3.png" width = "400" height = "400"></p>
