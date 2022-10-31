@@ -148,4 +148,49 @@ ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
   scale_fill_gradient(low = "gray80", high = "steelblue")
 
 ggsave("images/013_gradient_numeric.png", width = 4, height = 4)
-           
+
+
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")+
+  scale_x_continuous(trans = "log10")
+
+ggsave("images/014_log_trans.png", width = 4, height = 4)
+
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")+
+  scale_x_continuous(breaks = c(3,10,30))
+
+ggsave("images/015_breaks.png", width = 4, height = 4)
+
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")+
+  scale_x_continuous(expand = c(0,0))
+
+ggsave("images/016_expand.png", width = 4, height = 4)
+
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")+
+  scale_x_continuous(limits = c(0,30))
+
+ggsave("images/017_limits.png", width = 4, height = 4)
+
+
+ggplot(results_filt_genes[c(1,2),], aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")+
+  scale_y_discrete(labels = c("ENSG00000225972" = "Gene1",
+                              "ENSG00000116031" = "Gene2"))

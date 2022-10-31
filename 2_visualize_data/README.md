@@ -253,3 +253,23 @@ ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
 ```
 
 <p style="text-align:center;"><img src="images/013_gradient_numeric.png" width = "400" height = "400"></p>
+
+
+### Scale x and y axis
+
+In some occasions, we will need to scale the scale of one or both axis in order to deal with outliers or simply because we want to remark some specific values. Once again, we have to differenciate between axis with numeric and categorical values. We will start with numeric values, since are the most common that need x or y axis scaling.
+
+In the previous example, we can observe a gene that have a much higher value of -log(pvalue).
+
+<p style="text-align:center;"><img src="images/013_gradient_numeric.png" width = "400" height = "400"></p>
+
+We want know scale the x axis in order to distribute more efficient the data and avoid the noise of the outlier. To do that we will use the function **scale_"x or y"_continuous** and we will transform the axis to log10:
+
+```{r}
+ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
+  geom_col(aes(fill = -log(pvalue)))+
+  geom_point(aes(color = log2FoldChange), size = 3)+
+  scale_color_gradient2(low = "darkgreen", high = "firebrick") +
+  scale_fill_gradient(low = "gray80", high = "steelblue")+
+  scale_x_continuous(trans = "log10")
+```
