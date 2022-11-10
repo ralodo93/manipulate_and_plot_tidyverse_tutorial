@@ -29,158 +29,283 @@ gene_info <- read.delim("../input_data/gene_info.tsv")
 pheno_data <- read.delim("../input_data/pheno_data.tsv")
 ```
 
-## Basic concepts of `ggplot2`
+## `ggplot2` uses layers to decompose the graphics
 
-This section contains some theory about how works `ggplot2`. We will know the basic concepts such us how is built `ggplot2` and make our first plots. `ggplot2` follows the idea of *grammar of graphics*. This idea decompose a graphic in several layers or components. Each layer has a purpose and normally is connected to other layers. We can define up to 8 layers that uses `ggplot2`, but we only need four of them to make an informative figure. These four layers are: **data**, **mapping**, **geometries** and **statistics**.
+This section contains some theory about how works `ggplot2`. We will know the basic concepts such us how is built `ggplot2` and make our first plots. `ggplot2` follows the idea of *grammar of graphics*. This idea decompose a graphic in several layers or components. However, there are only four essential layer to plot informative graphics:
 
-The other layers are: **facet**, **theme**, **scales** and **coordinates** but we will see them in the future.
+- **data** the dataset to be plotted
+- **mapping** how map your dataset
+- **geometries** visual elements for your data
+- **statistics** representation of your data
 
-### Data
+The are other layers such as **theme**, **facet**, **coordinates**, and **scales**.
 
-Is the dataset with all the information that we need to plot the information. It should be in tidy table format and all you need to prepare the data is collected in the previous sesion. Data is included in `ggplot2` through the function **ggplot(data = your_dataset)**. If we use this function alone, `ggplot2` will plot a total empty figure.
+## The four essential elements of `ggplot2`
+
+We only need the four essential elements of `ggplot2` to produce an informative graphic. These layers are: **data** (which is introduced in **ggplot()**), **mapping** (that is defined in **ggplot()** and in the geom functions), **geometry** (when you choose the geometries) and **statistics** (that control the representation of geometries).
+
+We will use the next dataset:
 
 ```{r}
-ggplot(data = pheno_data)
+table_to_use <- results %>%
+  arrange(desc(abs(log2FoldChange))) %>%
+  head(5) %>%
+  inner_join(extended_data) %>%
+  inner_join(pheno_data, by = c("sample"="title")) %>%
+  inner_join(gene_info, by = c("gene"="ensembl_gene_id"))
+
+str(table_to_use)
+
+# 'data.frame':	830 obs. of  15 variables:
+#   $ baseMean       : num  17.7 17.7 17.7 17.7 17.7 ...
+# $ log2FoldChange : num  4.62 4.62 4.62 4.62 4.62 ...
+# $ lfcSE          : num  0.528 0.528 0.528 0.528 0.528 ...
+# $ stat           : num  8.75 8.75 8.75 8.75 8.75 ...
+# $ pvalue         : num  2.21e-18 2.21e-18 2.21e-18 2.21e-18 2.21e-18 ...
+# $ padj           : num  8.53e-14 8.53e-14 8.53e-14 8.53e-14 8.53e-14 ...
+# $ gene           : chr  "ENSG00000225972" "ENSG00000225972" "ENSG00000225972" "ENSG00000225972" ...
+# $ sample         : chr  "2950_PBMC" "2951_PBMC" "2965_PBMC" "2964_PBMC" ...
+# $ expression     : num  2.216 0 0 0.918 0 ...
+# $ individual     : int  2950 2951 2965 2964 3015 2972 3019 3022 3114 3115 ...
+# $ cell_type      : chr  "PBMC" "PBMC" "PBMC" "PBMC" ...
+# $ disease_state  : chr  "Healthy control" "Healthy control" "Healthy control" "Healthy control" ...
+# $ gender         : chr  "Male" "Female" "Female" "Female" ...
+# $ hgnc_symbol    : chr  "MTND1P23" "MTND1P23" "MTND1P23" "MTND1P23" ...
+# $ chromosome_name: chr  "1" "1" "1" "1" ...
 ```
 
-To make sure that the information is plotted correctly, we need to declare and use both **mapping** and **geometries** or **statistics**.
-
-### Mapping
-
-Is the declaration of what we want to plot from the **data**. By this parameter, also includes in **ggplot(data = your_dataset, mapping = aes(your aesthetics))** function, you choose how the data should be plotted. To do that, you have to use **aes()** function. The most important aesthetics normally are the `x` and `y` coordinates. With **aes()** function you declare what variables are the `x` and `y` coordinates. With **data** and **mapping** the plot changes but is not still informative. Now we only have the `x` and `y` axis.
+To make the first plot, define the variable *gene* to the `y` axis and the variable *expression* to `x` axis and use **geom_point()** to generate a scater plot.
 
 ```{r}
-ggplot(data = results, mapping = aes(y = log2FoldChange, x = baseMean))
-```
-
-### Geometries
-
-With this layer, we say to `ggplot2` how interpret the **data** and the **mapping**. We only need to decide which type of geometrical object is going to be plotted, like points, lines, bars, box plots, violin plots, text... With the previous example, we are going to plot the **data** and **mapping** with points (**geom_point()** function). We can do by three different ways. And the way can be important when the plot is complicated. We will see very soon the importance of how we declare the aesthetics.
-
-```{r}
-# Most conventional. Declare data and mapping in ggplot()
-# Used when all the layers are going to use the same data and mapping
-ggplot(results, aes(y = log2FoldChange, x = baseMean)) +
+ggplot(data = table_to_use, mapping = aes(y = gene, x = expression))+
   geom_point()
-
-# Declare data in ggplot and mapping in geom function
-# Used when all the data will use the same data but different mapping
-ggplot(results) +
-  geom_point(aes(y = log2FoldChange, x = baseMean))
-
-# Declare data and mapping in geom function
-# Used when layers will use different data and mapping
-ggplot() +
-  geom_point(data = results, aes(y = log2FoldChange, x = baseMean))
 ```
-
-The three ways makes exactly the same plot.
 
 <p style="text-align:center;"><img src="images/001_starting.png" width = "400" height = "400"></p>
 
-Now we are going to explain the differences of the three ways. Imagine that we want to plot only results from chromosomes 1, 2 and 3 and create a new variable that label gene as significant or not (pvalue < 0.05 and abs(log2FoldChange) > 0.5). First, using `dplyr` filter the gene_info and join to results. Try for yourself to practice more with `dplyr`.
+We can modify some properties of the **geometry** such as color or size, and add more than one layer to our plot, for example a line that connect the points.
 
 ```{r}
-results_filt <- gene_info %>%
-  filter(chromosome_name %in% c("1","2","3")) %>%
-  inner_join(results, by = c("ensembl_gene_id" = "gene")) %>%
-  mutate(significant = ifelse(padj < 0.05 & abs(log2FoldChange) > 0.5,"Significant","No Significant"))
+ggplot(data = table_to_use, mapping = aes(y = gene, x = expression))+
+  geom_point(size = 2, color = "orchid")+
+  geom_line(color = "blue")
 ```
 
-Geometries have several properties that can be changed. For this example, we will change color and size of the points. In addition we can add as many layers as we want. For example we can add a **geom_line()** to plot a line that connect points. You can do it with conventional way.
+<p style="text-align:center;"><img src="images/002_add_layers.png" width = "400" height = "400"></p>
+
+How can we modify the plot to color points or change the size based on conditional values? To answer this question we will need to use the **mapping**. For example if we want to color the points by *disease_state* variable and change the size based on *expression* variable we can do it declaring the aesthetics.
 
 ```{r}
-ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
-  geom_point(color = "blue", size = 3)+
-  geom_line(color = "darkgreen")
+ggplot(data = table_to_use, mapping = aes(y = gene, x = expression))+
+  geom_point(aes(color = disease_state, size = expression), alpha = 0.5)+
+  geom_line(color = "steelblue")
 ```
 
-<p style="text-align:center;"><img src="images/002_adding_layers.png" width = "400" height = "400"></p>
+<p style="text-align:center;"><img src="images/003_mapping_points.png" width = "400" height = "400"></p>
 
-Mapping can serve to differ condition. In the results_filt table we have three columns that define categorical variables (gene (not useful, a lot of them), chromosome_name and significant). The other variables are numeric. For example, we want to differ chromosome_name by a color.
+Now, each point that belongs to Alzheimer samples is filled in red and the Healthy samples are filled in blue. In addition, the different values of *Wexpression* are used to control the size of the points.
+
+Not all variables can be mapped in the same way. For example, *size* or *alpha* can only be used with continuous variables, while *shape* or *linetype* are used with categorical variables.
+
+This code returns a error because of this.
 
 ```{r}
-ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue), color = chromosome_name)) +
-  geom_point(size = 3)+
-  geom_line()
+ggplot(data = table_to_use, mapping = aes(y = gene, x = expression))+
+  geom_point(aes(shape = expression), alpha = 0.5)+
+  geom_line(color = "steelblue")
 ```
 
-<p style="text-align:center;"><img src="images/003_adding_color.png" width = "400" height = "400"></p>
+There are a lot of **geometries** and properties that can be mapped in all of them. We will see some of them but you will need to consult the help function a lot of times.
 
-As you can see both lines and points get the aesthetic color property. But what if we only want to color points in base of chromosome_name?. We need to declare aesthetic inside **geom_point()**. And with this method, we are using the second way to introduce data and mapping in `ggplot2`. In this occasion we will add a new aesthetic property, the size. Instead of plot all points with the same size, we can change sizes according to a numeric variable such as lfcSE, for example. As we will use the same `x` and `y` we only need to declare them in **ggplot()**, but size and mainly color should be declare in **geom_point()**
-
-```{r}
-ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
-  geom_point(aes(size = lfcSE, color = chromosome_name))+
-  geom_line()
-```
-
-<p style="text-align:center;"><img src="images/004_color_points.png" width = "400" height = "400"></p>
-
-The last way of introducing data (through geom functions) can be explained with an example of **geom_text()** function, that is used to write labels in the plot. In this example we wan to add labels from only significant genes. We can not include all the data in geom_text() because it will write all gene names.
+You may have notice that we talked about four different layers that were indispensable to plot a figure with `ggplot2`. But we have only seen three of them and we have plotted some figures. What about **statistics**? This layer is implicity declare in the geom functions. Each geom function has a different statistics by default. When you look for the help of **geom_point()** function you will see a parameter that is stat (**statistics** label). In the case of **geom_point()**, **geom_text()**, **geom_line()** and others this stat is "identity". This means that `x` and `y` mapping should be defined by the user. However there are other geom functions that use different stat. For example, the **geom_bar()** use the stat "count". What "count" means? It means that you have to introduce only one of `x` or `y` axis. The other will be calculated by the count function. We can see with an example.
 
 ```{r}
-ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
-  geom_point(aes(size = lfcSE, color = chromosome_name))+
-  geom_line()+
-  geom_text(aes(label = ensembl_gene_id), size = 2)
-```
-<p style="text-align:center;"><img src="images/005_error_text.png" width = "400" height = "400"></p>
-
-That not what we want. We need to use different data for **geom_text()**. As other **mapping** are the same, it is not necessary to add in **geom_text()** but in occasion we would need to change them.
-
-```{r}
-results_filt_text <- results_filt %>%
-  filter(significant == "Significant")
-
-ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
-  geom_point(aes(size = lfcSE, color = chromosome_name))+
-  geom_line()+
-  geom_text(data = results_filt_text,aes(label = ensembl_gene_id), size = 2)
-```
-
-<p style="text-align:center;"><img src="images/006_good_text.png" width = "400" height = "400"></p>
-
-That is what we wanted to plot. Until now, we have learnt how introduce data in `ggplot2`, how mapping some properties, how use some geometries and change the properties of them by setting (like color = "blue") or by aesthetic (like color = chromosome_name).
-
-To finish with the basic concepts of geometries we will talk about the order. As you have seen, geometries are added by `+` one by one. `ggplot2` do not choose which geometry should be back or forward. The order in which they are introduced is the order in which they are plotted. In this case the order is: points in the back, lines over points and text over lines and points. If you want to change the order in which they are displayed, you only need to reorder them.
-
-```{r}
-ggplot(results_filt, aes(x = log2FoldChange, y = -log(pvalue))) +
-  geom_text(data = results_filt_text,aes(label = ensembl_gene_id), size = 2)+
-  geom_point(aes(size = lfcSE, color = chromosome_name))+
-  geom_line()
-```
-<p style="text-align:center;"><img src="images/007_reorder_layers.png" width = "400" height = "400"></p>
-
-Now the points are over lines and text.
-
-### Statistics
-
-You may have notice that we talked about four different layers that were indispensable to plot a figure with `ggplot2`. But we have only seen three of them and we have plotted several figures. What about **statistics**? Well, this layer is implicit declare in the geom functions. Each geom function have a different statistics. When you look for the help of **geom_point()** function you will see a parameter that is stat (**statistics** label). In the case of **geom_point()**, **geom_text()**, **geom_line()** and others this stat is "identity". This means that `x` and `y` mapping should be defined by the user. However there are other geom functions that use different stat. For example, the **geom_bar()** use the stat "count". What "count" means? It means that you have to introduce only one of `x` or `y` coordinates. The other will be calculated by the count function. We can see with an example.
-
-```{r}
-ggplot(pheno_data, aes(x = cell_type))+
+ggplot(data = table_to_use, mapping = aes(y = gene))+
   geom_bar()
 ```
-<p style="text-align:center;"><img src="images/008_stat_bar.png" width = "400" height = "400"></p>
+<p style="text-align:center;"><img src="images/004_bar.png" width = "400" height = "400"></p>
 
-We use **geom_bar()** to count the number of times that happen the aesthetic that we select. In this case, **geom_bar** calculate the number of rows that have the different levels of cell_type variable.
+We use **geom_bar()** to count the number of times that happen the aesthetic that we select. In this case, **geom_bar** calculate the number of rows that have the different levels of *gene* variable.
 
 Of course, we can change the stat of a function and repply the same that do **geom_bar()** by hand. There is a alternative function, **geom_col()** that do the same that **geom_bar()** but with the stat "identity" and the plot will be the same.
 
 ```{r}
-pheno_data_count <- pheno_data %>%
-  group_by(cell_type) %>%
+table_count <- table_to_use %>%
+  group_by(gene) %>%
   count()
 
-ggplot(pheno_data_count, aes(x = cell_type, y = n))+
+ggplot(table_count, aes(y = gene, x = n))+
   geom_bar(stat = "identity")
 
-ggplot(pheno_data_count, aes(x = cell_type, y = n))+
+ggplot(table_count, aes(y = gene, x = n))+
   geom_col()
 ```
 There are other functions that have different stat for example **geom_density()** uses stat "density" or **geom_boxplot()** uses stat "boxplot".
+
+## Starting to customize graphics
+
+Although you only need the four essential layers of `ggplot2` to plot a graph, the graphics that we have plotted are very primitive. `ggplot2` provides a lot of manners of modifying your graphs using the rest of layers. We will approach all of them.
+
+### Scales
+
+Scales are used in order to change the properties on how we map the datasets. The most common scale change that users nomally do is changing the color or the size of a geom or change the axis scales.
+
+#### Scale axis
+
+All the scale functions that are used to change the axis are named **scale_x/y_X()** where X can be a type of scale such as *continuous*, *log10*, *square* or *reverse*.
+
+We are going to use one of the previous plot in order to change both axis scales.
+
+
+
+## Customize graphics
+
+Once we have explained the basic of `ggplot2`, we can start to learn how customize graphics with `ggplot2`. For this purpose we will produce some figures that are usually used in the field of Bioinformatics. Instead of explain the theory we will practice with some examples. Each one includes different skills that we will learn.
+
+The graphics are:
+
+- Volcano Plot. Representation of differential expression analysis. In the `y` axis we put the -log(pvalue) and in the `x` axis we put the log2FoldChange. The representation is make with points. These points will have colored with a diverging palette (you can change it) based on the log2FoldChange value and sized by -log(pvalue). In addition we will add text to the 10 most significant genes. The result should be:
+
+<p style="text-align:center;"><img src="images/volcano_plot_10.png" width = "400" height = "400"></p>
+
+### Volcano Plot (points, color, scales, text)
+
+Representation of differential expression analysis. In the `y` axis we put the -log(pvalue) and in the `x` axis we put the log2FoldChange. The representation is make with points. These points will have colored with a diverging palette (you can change it) based on the log2FoldChange value and sized by -log(pvalue). In addition we will add text to the 10 most significant genes.
+
+The starting plot will be saved in "p" object.
+
+```{r}
+results_text <- results %>%
+  arrange(padj) %>%
+  head(10)
+
+p <- ggplot()+
+  geom_point(data = results,
+             aes(x = log2FoldChange, y = -log(pvalue),
+                 fill = log2FoldChange, size = -log(pvalue)),
+             shape = 21, color = "black")+
+  geom_text(data = results_text,
+            aes(x = log2FoldChange, y = -log(pvalue),label = gene),
+            size = 1.5, nudge_y = 1, nudge_x = 1)
+p
+```
+<p style="text-align:center;"><img src="images/volcano_plot_01.png" width = "400" height = "400"></p>
+
+We just know how to declare aesthetic as size, color and `x` and `y` position. We also understand how introduce different datasets in our plot and setting some properties. There two new things that we did not know previously. The first is that now we control the color of the points with fill instaead of the color. That is due to we have changed the shape to 21. This shape is a filled point, so the fill reflects the color of the point and the color is the border color. The second new thing is the addition of nudge_x and nudge_y to geom_text. This is used to insert spaces (nudge_x = 1, 1 unit to right and nudge_y = 1, 1 unit to up) to separate label from points.
+
+#### Scale color and size
+
+The first new thing that we are going to apply is change the color set. In this case, the color is scaled by a numeric variable (log2FoldChange) and that variable is diverging (has values lower and greater than 0). `ggplot2` has very function to scale colors and a lot of extensions of `ggplot2` produces several of palettes. In this occasion we are going to use two of them and you will select your favorite. We can use **scale_fill_distiller(type = "div")** that use prebuilt palettes or create or own palette with **scale_fill_gradient2()**.
+
+```{r}
+p + scale_fill_distiller(type = "div")
+p + scale_fill_gradient2(low = "darkgreen", mid = "white", high = "orchid")
+```
+
+<p style="text-align:center;"><img src="images/volcano_plot_02.png" width = "400" height = "400"></p>
+
+<p style="text-align:center;"><img src="images/volcano_plot_03.png" width = "400" height = "400"></p>
+
+In addition, the size of the points is excessive. By default, the size of a geom object has a range from 1 to 6. We can change this range as we want. In this case we would like to reduce the maximum range value to 4. We can do this with **scale_size()** function.
+
+```{r}
+p + scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))
+```
+
+<p style="text-align:center;"><img src="images/volcano_plot_04.png" width = "400" height = "400"></p>
+
+#### Change theme
+
+One of the layers more used to make customized plots with `ggplot2` is the **theme**. This layer is the one that controls the appearance of the plot. You can modify a lot of aspects of your plot changing the **theme**. Examples of elements that can be changed are: aspect of axis text or axis title, lines in the axis, the legend size and position... `ggplot2` has some pre-built themes that can be used.
+
+```{r}
+p + scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))+
+  theme_minimal()
+
+p + scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))+
+  theme_classic()
+
+p + scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))+
+  theme_bw()
+```
+<p style="text-align:center;"><img src="images/volcano_plot_05.png" width = "400" height = "400"></p>
+
+<p style="text-align:center;"><img src="images/volcano_plot_06.png" width = "400" height = "400"></p>
+
+<p style="text-align:center;"><img src="images/volcano_plot_07.png" width = "400" height = "400"></p>
+
+Besides these pre-built functions (there are a lot of them), you can define you own **theme** using the function **theme()**. All the parameters of **theme()** function must be used with some the element_() functions. There are four main element functions: element_blank() used to remove the element, element_rect() to modify a rectangle, element_text() to modify a text and element_line() to modify a line. In the next example we will use all of them:
+
+```{r}
+p + scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))+
+  theme(
+    axis.text = element_text(size = 8), # Change axis text size of both axis to 8
+    axis.title.x = element_text(size = 9), # Change axis title size of y axis to 9
+    axis.line = element_line(color = "blue"), # Put lines on axis
+    legend.key = element_rect(fill = "white"), # Change the box color of legend to white
+    panel.background = element_blank() # remove background of the panel
+  )
+```
+
+<p style="text-align:center;"><img src="images/volcano_plot_08.png" width = "400" height = "400"></p>
+
+For our plot we will define the next **theme**.
+
+```{r}
+p + scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))+
+  theme(
+    axis.text = element_text(size = 8),
+    axis.title = element_text(size = 9),
+    axis.line = element_line(),
+    legend.key = element_rect(fill = "white"),
+    panel.background = element_blank(),
+    legend.key.size = unit(0.2,"cm"),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  )
+```
+
+<p style="text-align:center;"><img src="images/volcano_plot_09.png" width = "400" height = "400"></p>
+
+
+#### Text Repel
+
+As you can see, the text for some genes are overlapped. You can reduce that effect using a package derived from `ggplot2`. This package is `ggrepel` and has a function called **geom_text_repel()** that do the same than **geom_text()** but look for a better disposition of text in order to avoid overlapping.
+
+```{r}
+library(ggrepel)
+p <- ggplot()+
+  geom_point(data = results,
+             aes(x = log2FoldChange, y = -log(pvalue),
+                 color = log2FoldChange, size = -log(pvalue)))+
+  geom_text_repel(data = results_text,
+            aes(x = log2FoldChange, y = -log(pvalue),label = gene),
+            size = 1.5)+
+  scale_fill_distiller(type = "div")+
+  scale_size(range = c(1,4))+
+  theme(
+    axis.text = element_text(size = 8),
+    axis.title = element_text(size = 9),
+    axis.line = element_line(),
+    legend.key = element_rect(fill = "white"),
+    panel.background = element_blank(),
+    legend.key.size = unit(0.2,"cm"),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  )
+
+p
+```
+
+<p style="text-align:center;"><img src="images/volcano_plot_10.png" width = "400" height = "400"></p>
+
+
 
 ## Starting to customize graphics
 
@@ -243,7 +368,7 @@ results_filt_genes <- results_filt %>%
 ggplot(results_filt_genes, aes(y = ensembl_gene_id, x = -log(pvalue)))+
   geom_col(aes(fill = -log(pvalue)))+
   geom_point(aes(color = log2FoldChange), size = 3)+
-  scale_color_distiller(type = "div", palette = "PiYG")+
+  scale_fill_distiller(type = "div", palette = "PiYG")+
   scale_fill_distiller(type = "seq", palette = "YlOrBr", direction = 1)
 ```
 <p style="text-align:center;"><img src="images/012_distiller_numeric.png" width = "400" height = "400"></p>
@@ -268,7 +393,7 @@ There are some ways to change the scale of the axis. We will use as example the 
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")
+  scale_fill_distiller(type = "div")
 ```
 
 <p style="text-align:center;"><img src="images/014_scales_pre.png" width = "400" height = "400"></p>
@@ -280,7 +405,7 @@ The most common approach to scale the axis is reducing or increasing the limits.
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_y_continuous(limits = c(0,5))
 ```
 
@@ -297,7 +422,7 @@ As you can see, `ggplot2` does not use the min and max value to start the plot. 
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_y_continuous(limits = c(0, 10),
                      expand = expansion(mult = c(0, 0.5),
                                            add = c(0, -3)))
@@ -316,7 +441,7 @@ You can also select the location of marks from an axis using the parameters *bre
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_x_continuous(breaks = c(-1,0,1)) # Only show -1,0,1
 ```
 
@@ -327,7 +452,7 @@ Or setting the breaks with a range
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_x_continuous(breaks = scales::breaks_width(0.5)) # Each 0.5
 ```
 <p style="text-align:center;"><img src="images/018_scales_breaks_range.png" width = "400" height = "400"></p>
@@ -339,17 +464,17 @@ Finally we can transform the axis into a different scale. You can reverse the sc
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_y_continuous(trans = "log10")
 
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_y_continuous(trans = "sqrt")
 
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange), size = 1.5)+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_y_continuous(trans = "reverse")
 ```
 <p style="text-align:center;"><img src="images/019_scales_trans.png" width = "400" height = "400"></p>
@@ -365,7 +490,7 @@ Instead of selecting the same size for all the points, we are going to introduce
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange, size = -log(pvalue)))+
-  scale_color_distiller(type = "div")
+  scale_fill_distiller(type = "div")
 ```
 
 <p style="text-align:center;"><img src="images/020_scales_size_pre.png" width = "400" height = "400"></p>
@@ -375,7 +500,7 @@ The size of the points is already scaled by default, from 1 to 6. But maybe you 
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange, size = -log(pvalue)))+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_size_continuous(range = c(3,10))
 ```
 <p style="text-align:center;"><img src="images/021_scales_size.png" width = "400" height = "400"></p>
@@ -387,7 +512,7 @@ Alpha works similar than size, with the function **scale_alpha_continuous()**. B
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange, size = -log(pvalue), alpha = -log(pvalue)))+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   scale_alpha_continuous(range = c(1,0.1))
 ```
 <p style="text-align:center;"><img src="images/022_scales_alpha.png" width = "400" height = "400"></p>
@@ -404,7 +529,7 @@ Facets are used to split the graphic in multiple plot in order to improve or det
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange))+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   facet_wrap(~chromosome_name)
 ```
 <p style="text-align:center;"><img src="images/023_facet_1.png" width = "400" height = "400"></p>
@@ -414,7 +539,7 @@ By this way you can check in which chromosome are located the more interested ge
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange))+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   facet_wrap(~chromosome_name, scales = "free_y")
 ```
 
@@ -429,7 +554,7 @@ Setting scales to fre_y, cobvert each splitted plot with one determinated scale 
 ```{r}
 ggplot(results_filt, aes(y = -log(pvalue), x = log2FoldChange))+
   geom_point(aes(color = log2FoldChange))+
-  scale_color_distiller(type = "div")+
+  scale_fill_distiller(type = "div")+
   facet_grid(significant~chromosome_name)
 ```
-<p style="text-align:center;"><img src="images/025_facet_3.png" width = "400" height = "400"></p>
+<p style="text-align:center;"><img src="images/025_facet_3.png" width = "400" height = "400"></p> -->

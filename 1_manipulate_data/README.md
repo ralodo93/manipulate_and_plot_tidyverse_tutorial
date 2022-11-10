@@ -1,4 +1,7 @@
-# Manipulate Data with `tidyverse`
+# Manipular datos con `tidyverse`
+
+
+
 
 The package `tidyverse` contains some useful packages to explore scientific data. In this section we will learn how manipulate this data, which usually is collected in tables or matrices. The objective of this season is provide useful tips and trips to use `tidyverse` and prepare data to visualize in `ggplot2`.
 

@@ -1,18 +1,23 @@
-# Tutorial for Manipulating and Visualizing Data with `tidyverse`
+# Tutorial para manipular y visualizar datos con `tidyverse`
 
-This tutorial have been made in order to provide good practices to manipulate and visualize data with the packages includes in the library `tidyverse`. The very starting set up consist on install R if you have not intalled it yet. You can download and install from [here](https://www.r-project.org/).
+Este tutorial se ha realizado con el fin de dar a conocer los conceptos clave, así como una serie de buenas prácticas a la hora de manipular y generar gráficos con el paquete de R `tidyverse`. Este paquete incluye una serie de librerías dirigidas a generar tablas de tipo *tidy table* con las que se pueden generar gráficos muy personalizados con `ggplot2`. Antes de comenzar, los requisitos iniciales del curso son:
 
-## How use the repository
+- Tener instalado tanto R como la librería `tidyverse` desde [aquí](https://www.r-project.org/).
+- Conocimientos muy básicos de programación en R.
 
-To illustrate the use of `tidyverse` we will use RNA-Seq data from a Serie of NCBI GEO. This Serie contains RNA-Seq data from multiple samples with and without Alzheimer. These data have been already downloaded and preprocessed in the folder [input_data](./input_data). There are located the tables that are going to be used.
+## ¿Cómo puedo usar este repositorio?
 
-- **pheno_data.tsv** contains the information about all samples that were recruited for the study.
-- **normalized_counts.tsv** is the expression matrix, with samples in columns and genes in rows.
-- **gene_info.tsv** shows information about the genes
-- **results_table.tsv** is the result of applying a differential expression analysis of Alzheimer patients versus Healthy control.
+En este repositorio hay tres carpetas numeradas: 
 
-Besides input data we provide three folders. Each folder have a different objective and they are ordered sequentially.
+- [0_prepare_data](0_prepare_data) donde está alojado el código que hemos usado para generar los datos se van a usar de ejemplo. No es necesario para este curso.
 
-The first one is [0_prepare_data](./0_prepare_data) where there is a R script file with the code to get manually the input data located at input_data. If you are not interested in how download and preprocess the data you can omit this folder.
+- [1_manipulate_data](1_manipulate_data) donde se alojan las diferentes clases acerca de como se pueden manejar los datos utilizando algunas de las librería que incluye `tidyverse`, tales como `dplyr` o `tibble`.
 
-The rest of folders includes R codes to learn how manipulate ([1_manipulate_data](./1_manipulate_data)) and visualize data ([2_visualize_data](./2_visualize_data)). In addition, there are .md, .Rmd and .html files to understand the code, similar as a step by step tutorial.
+- [2_visualize_data](2_visualize_data) donde se alojan las diferentes clases en las que se muestran  los conceptos básicos de `ggplot2` y como sacar rendimiento del mismo para generar figuras muy personalizadas.
+
+Además, se incluye una carpeta llamada [input_data](input_data) en la cual se incluyen los datos de ejemplo que se van a utilizar. Estos datos de ejemplo proceden de un dataset descargado de NCBI GEO que incluye datos de RNA-Seq de múltiples muestras con y sin Alzheimer. Para ilustrar como manejar las librerías de `tidyverse` se usarán las siguientes tablas:
+
+- **pheno_data.tsv** contiene la información clínica de las muestras.
+- **normalized_counts.tsv** es la matriz de expresión de cada muestra. Con genes en filas y muestras en columnas.
+- **gene_info.tsv** muestra información sobre los genes
+- **results_table.tsv** es el resultado de aplicar un análisis de expresión diferencial entre las muestras de pacientes con Alzheimer y las muestras sanas.
