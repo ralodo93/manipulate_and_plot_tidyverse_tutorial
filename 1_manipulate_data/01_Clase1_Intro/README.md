@@ -1,18 +1,18 @@
 # Manipular datos con `tidyverse`
 
-El paquete `tidyverse` contiene varias de las librerÌas m·s utilizadas y optimizadas para manipular y explorar datos. En esta primera clase se abordar·n los siguientes temas
+El paquete `tidyverse` contiene varias de las librer√≠as m√°s utilizadas y optimizadas para manipular y explorar datos. Durante un total de seis lecciones aprender√°s los conceptos b√°sicos del uso de esta librer√≠a.
 
-- IntroducciÛn a `dplyr` y `tibble`
+- Introducci√≥n a `dplyr` y `tibble`
 - Concepto de `tidy table`
 - Uso de pipes
 
-## IntroducciÛn a `dplyr` y `tibble`
+## Introducci√≥n a `dplyr` y `tibble`
 
-Estas dos librerÌas son muy utilizadas a la hora de poder manipular los datos. `dplyr` se basa en un concepto llamado *grammar of data manipulation*, que no es m·s que la descomposiciÛn de un proceso completo sobre una tabla a travÈs de diferentes pasos (tambiÈn llamados verbos, ya que las funciones cogen nombre de verbos.). Por otro lado, `tibble` es un concepto moderno de lo que usualmente se conocen como data.frame. De ambas librerÌas se usar·n funciones que servir·n para manejar los datos y preparlos en un formato de `tidy table`.
+Estas dos librer√≠as son muy utilizadas a la hora de poder manipular los datos. `dplyr` se basa en un concepto llamado *grammar of data manipulation*, que no es m√°s que la descomposici√≥n de un proceso completo sobre una tabla a trav√©s de diferentes pasos (tambi√©n llamados verbos, ya que las funciones cogen nombre de verbos.). Por otro lado, `tibble` es un concepto moderno de lo que usualmente se conocen como data.frame. De ambas librer√≠as se usar√°n funciones que servir√°n para manejar los datos y preparlos en un formato de `tidy table`.
 
 ## Concepto de `tidy table`
 
-øQuÈ es una `tidy table`? La mayorÌa de los datasets que se utilizan en ciencias de datos ya son `tidy tables`. Una `tidy table` no es m·s que una tabla en la que cada registro se almacena en una lÌnea o fila diferente mientras que las columnas aportan diferentes variables acerca de ese registro. En los datos de ejemplos propuestos para este curso, una `tidy table` es la tabla **pheno_data** ya que cada fila de la misma contiene informaciÛn de cada muestra.
+¬øQu√© es una `tidy table`? La mayor√≠a de los datasets que se utilizan en ciencias de datos ya son `tidy tables`. Una `tidy table` no es m√°s que una tabla en la que cada registro se almacena en una l√≠nea o fila diferente mientras que las columnas aportan diferentes variables acerca de ese registro. En los datos de ejemplos propuestos para este curso, una `tidy table` es la tabla **pheno_data** ya que cada fila de la misma contiene informaci√≥n de cada muestra.
 
 ```{r}
 library(tidyverse)
@@ -22,7 +22,7 @@ head(as_tibble(pheno_data))
 
 # # A tibble: 6 x 5
 # title     individual cell_type disease_state   gender
-# <chr>          <int> <chr>     <chr>           <chr> 
+# <chr>          <int> <chr>     <chr>           <chr>
 #   1 2950_PBMC       2950 PBMC      Healthy control Male  
 # 2 2951_PBMC       2951 PBMC      Healthy control Female
 # 3 2965_PBMC       2965 PBMC      Healthy control Female
@@ -32,22 +32,22 @@ head(as_tibble(pheno_data))
 
 ```
 
-Cada fila corresponde a una muestra (*title*) y tiene informaciÛn acerca de la misma, como el identificador de individuo (*individual*), el tipo celular (*cell_type*), si tiene Alzheimer o no (*disease_state*) y el gÈnero (*gender*).
+Cada fila corresponde a una muestra (*title*) y tiene informaci√≥n acerca de la misma, como el identificador de individuo (*individual*), el tipo celular (*cell_type*), si tiene Alzheimer o no (*disease_state*) y el g√©nero (*gender*).
 
-Es de suma importancia mantener este formato ya que `ggplot2` solo aceptar· tablas de este modo. En ning˙n caso se podr·n utilizar matrices u otro tipo de formato de tablas.
+Es de suma importancia mantener este formato ya que `ggplot2` solo aceptar√° tablas de este modo. En ning√∫n caso se podr√°n utilizar matrices u otro tipo de formato de tablas.
 
 ## Uso de pipes
 
-Para terminar esta clase se abordar· el uso de las tuberÌas (o pipes) en los datasets. Para utilizarlos se usa la funciÛn **%>%** del paquete `dplyr`. Pero... øquÈ es una pipe?. Una pipe no es m·s que una forma de enviar la informaciÛn que sale de una acciÛn para que se procese en otra acciÛn. Por ejemplo:
+Para terminar esta clase veremos que son las pipes (o tuber√≠as) y como se usan. Una pipe es una forma de enviar la informaci√≥n para ejecutar una acci√≥n concreta. Para utilizarlos se usa la funci√≥n **%>%** del paquete `dplyr`. Tan solo debemos usar esta funci√≥n para conectar una tabla a las diferentes funciones que queremos realizar sobre esa tabla. En el ejemplo siguiente aplicaremos una pipe sobre la tabla **pheno_data** para indicar que queremos ejecutar la funci√≥n **head()**. Posteriormente, sobre el resultado de aplicar **head()** se a√±adir√° otra pipe para usar la funci√≥n **as_tibble()**. Es decir, realizar√° las funciones de forma secuencial, siempre cogiendo el resultado de la pipe anterior.
 
 ```{r}
-pheno_data %>% # La pipe est· enviando la informaciÛn de pheno_data a head()
-  head() %>% # Ejecuta head() y envÌa el resultado a as_tibble()
+pheno_data %>% # La pipe est√° enviando la informaci√≥n de pheno_data a head()
+  head() %>% # Ejecuta head() y env√≠a el resultado a as_tibble()
   as_tibble() # Ejecuta as_tibble()
-  
+
 # # A tibble: 6 x 5
 #   title     individual cell_type disease_state   gender
-#   <chr>          <int> <chr>     <chr>           <chr> 
+#   <chr>          <int> <chr>     <chr>           <chr>
 # 1 2950_PBMC       2950 PBMC      Healthy control Male  
 # 2 2951_PBMC       2951 PBMC      Healthy control Female
 # 3 2965_PBMC       2965 PBMC      Healthy control Female
@@ -55,4 +55,4 @@ pheno_data %>% # La pipe est· enviando la informaciÛn de pheno_data a head()
 # 5 3015_PBMC       3015 PBMC      Healthy control Male  
 # 6 2972_PBMC       2972 PBMC      Healthy control Female
 ```
-La base de las funciones de `dplyr` y `tibble` es el uso de estos pipes con el fin de hacer un cÛdigo mucho m·s legible y claro. Adem·s, por lo general suele ser m·s preciso utilizar una serie de pipe y generar un objeto a guardar que generar un objeto diferente para cada paso que se quiera realizar.
+La base de las funciones de `dplyr` y `tibble` es el uso de estos pipes con el fin de hacer un c√≥digo mucho m√°s legible y claro. Adem√°s, por lo general, suele ser m√°s preciso utilizar una serie de pipe y generar un objeto a guardar que generar un objeto diferente para cada paso que se quiera realizar.

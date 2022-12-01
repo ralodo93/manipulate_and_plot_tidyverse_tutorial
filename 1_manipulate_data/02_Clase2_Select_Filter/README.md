@@ -1,6 +1,6 @@
 # Uso de **select()** y **filter()**
 
-En esta clase se explicar· en profundidad el uso de las funciones **select()** y **filter()** del paquete `dplyr`, asÌ como algunas buenas pr·cticas o trucos para su uso.
+A continuaci√≥n veremos el uso de dos de las funciones m√°s usadas: **select()** y **filter()**
 
 - Seleccionar las columnas que se quieren mostrar con **select()**.
 - Filtrar las filas que no cumplen ciertas condiciones con **filter()**.
@@ -10,14 +10,13 @@ library(tidyverse)
 pheno_data <- read.delim("../../input_data/pheno_data.tsv")
 ```
 
-
 ## **select()**
 
-La funciÛn **select()** es una de las m·s usadas y una de las m·s sencillas de entender. Se aplica sobre un data.frame o tibble y genera un data.frame o tibble en el cual se han seleccionado solo algunas de las columnas que contenÌa el dataset original. El uso m·s extendido de **select()** es simplemente introduciendo el nombre de las columnas que se desean mantener.
+La funci√≥n **select()** es una de las m√°s usadas y una de las m√°s sencillas de entender. Se aplica sobre un data.frame o tibble y genera un data.frame o tibble en el cual se han seleccionado solo algunas de las columnas que conten√≠a el dataset original. El uso m√°s extendido de **select()** es simplemente introduciendo el nombre de las columnas que se desean mantener.
 
 ```{r}
 pheno_data %>%
-  select(title, individual) %>% # Mantener title y individual. Eliminar el resto
+  select(title, individual) %>% # Mantener title e individual. Eliminar el resto
   as_tibble()
 
 # # A tibble: 166 x 2
@@ -36,7 +35,7 @@ pheno_data %>%
 # # ... with 156 more rows
 ```
 
-Sin embargo, no es la ˙nica forma de usar **select()**. Se pueden seleccionar las columnas que estÈn colocadas entre una y otra (por ejemplo, seleccionar las columnas entre *individual* y *disease_state*) o eliminar alguna columna en concreto.
+Sin embargo, no es la √∫nica forma de usar **select()**. Se pueden seleccionar las columnas que est√°n colocadas entre una y otra (por ejemplo, seleccionar las columnas entre *individual* y *disease_state*) o eliminar alguna columna en concreto.
 
 ```{r}
 pheno_data %>%
@@ -64,7 +63,7 @@ pheno_data %>%
 
 # # A tibble: 166 x 3
 # cell_type disease_state       gender
-# <chr>     <chr>               <chr> 
+# <chr>     <chr>               <chr>
 #   1 PBMC      Healthy control     Male  
 # 2 PBMC      Healthy control     Female
 # 3 PBMC      Healthy control     Female
@@ -78,9 +77,9 @@ pheno_data %>%
 # # ... with 156 more rows
 ```
 
-### Buenas pr·cticas de **select()**
+### Buenas pr√°cticas de **select()**
 
-Una de las cosas que se pueden hacer aprovechando las capacidades de **select()** es ordenar las columnas del dataset. En este caso no se seleciona ninguna columna, sino que se altera el orden de las mismas.
+Una de las cosas que se pueden hacer aprovechando **select()** es ordenar las columnas del dataset. En este caso no se seleciona ninguna columna, sino que se altera el orden de las mismas.
 
 ```{r}
 pheno_data %>%
@@ -103,7 +102,7 @@ pheno_data %>%
 # # ... with 156 more rows
 ```
 
-**select()** tambiÈn funciona con algunas funciones de `tidyverse` como **starts_with()** o **ends_with()**, es decir, funciones que utilizan la b˙squeda de patrones o expresiones regulares.
+**select()** tambi√©n funciona con algunas funciones de `tidyverse` como **starts_with()** o **ends_with()**, es decir, funciones que utilizan la b√∫squeda de patrones o expresiones regulares.
 
 ```{r}
 pheno_data %>%
@@ -126,7 +125,7 @@ pheno_data %>%
 # # ... with 156 more rows
 ```
 
-En caso de tener un vector externo con el nombre de las columnas que se quieren seleccionar, se debe usar la funciÛn **all_of()** o **any_of()**.
+En caso de tener un vector externo con el nombre de las columnas que se quieren seleccionar, se debe usar la funci√≥n **all_of()** o **any_of()**.
 
 ```{r}
 keep_cols <- c("title","gender","cell_type")
@@ -153,7 +152,7 @@ pheno_data %>%
 
 ## **filter()**
 
-La funciÛn **filter()** se utiliza para mantener ciertas filas que cumplen con las condiciones que se le indican. El mÈtodo m·s usual de usar **filter()** es indicando que columna o columnas deben cumplir una determinada condiciÛn.
+La funci√≥n **filter()** se utiliza para mantener ciertas filas que cumplen con las condiciones que se le indican. El m√©todo m√°s usual de usar **filter()** es indicando que columna o columnas deben cumplir una determinada condici√≥n.
 
 ```{r}
 pheno_data %>%
@@ -162,7 +161,7 @@ pheno_data %>%
 
 # # A tibble: 55 x 5
 # title     individual cell_type disease_state       gender
-# <chr>          <int> <chr>     <chr>               <chr> 
+# <chr>          <int> <chr>     <chr>               <chr>
 #   1 2950_PBMC       2950 PBMC      Healthy control     Male  
 # 2 2951_PBMC       2951 PBMC      Healthy control     Female
 # 3 2965_PBMC       2965 PBMC      Healthy control     Female
@@ -176,19 +175,19 @@ pheno_data %>%
 # # ... with 45 more rows
 ```
 
-Las condiciones que se incluyen dentro de **filter()** pueden ser m˙ltiples y tan complejas como sea necesario. Las funciones de filtro m·s utilizadas son los operadores relacionales (==, >, <=, != etc), operadores lÛgicos (&, |, !), el operador %in%, o **is.na()**, **between()** y **near()**.
+Las condiciones que se incluyen dentro de **filter()** pueden ser m√∫ltiples y tan complejas como sea necesario. Las funciones de filtro m√°s utilizadas son los operadores relacionales (==, >, <=, != etc), operadores l√≥gicos (&, |, !), el operador %in%, o **is.na()**, **between()** y **near()**.
 
 ```{r}
 pheno_data %>%
-  filter(gender != "Male", # GÈnero diferente de "Male"
+  filter(gender != "Male", # G√©nero diferente de "Male"
          disease_state == "Healthy control", # Solo "Healthy control"
          # cell type que incluya los valores del vector
-         cell_type %in% c("CD4 memory T cells","CD8 memory T cells")) %>% 
+         cell_type %in% c("CD4 memory T cells","CD8 memory T cells")) %>%
   as_tibble()
 
 # # A tibble: 32 x 5
 # title    individual cell_type          disease_state   gender
-# <chr>         <int> <chr>              <chr>           <chr> 
+# <chr>         <int> <chr>              <chr>           <chr>
 #   1 2951_CD4       2951 CD4 memory T cells Healthy control Female
 # 2 2965_CD4       2965 CD4 memory T cells Healthy control Female
 # 3 2964_CD4       2964 CD4 memory T cells Healthy control Female
